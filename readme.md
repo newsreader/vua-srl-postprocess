@@ -31,11 +31,6 @@ Contact
 * VU University Amsterdam
 * [f.ilievski@student.vu.nl](f.ilievski@student.vu.nl)
 
-License
--------	
-This software is distributed under the Apache v2.0 license. See LICENSE for more info. 
-
-
 	
 **To do**	
 * Improve the module in the future

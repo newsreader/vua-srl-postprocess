@@ -10,7 +10,7 @@ Requirements
 * Python (this module has been tested with version 2.7.5) and the following module:
 
 	
-* [KafNafParser](https://github.com/opener-project/KafNafParserPy)
+* [KafNafParser](https://github.com/cltl/KafNafParserPy)
 
 * OWL format of the ESO ontology (version 0.6)
 

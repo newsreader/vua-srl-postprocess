@@ -32,5 +32,6 @@ Contact
 * [f.ilievski@student.vu.nl](f.ilievski@student.vu.nl)
 
 	
-**To do**	
-* Improve the module in the future
+**License**
+Software distributed under Apache License Version 2.0, January 2004.
+See LICENSE file for more details.

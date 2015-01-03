@@ -31,7 +31,8 @@ Contact
 * VU University Amsterdam
 * [f.ilievski@student.vu.nl](f.ilievski@student.vu.nl)
 
-	
-**License**
+
+License
+-------
 Software distributed under Apache License Version 2.0, January 2004.
 See LICENSE file for more details.

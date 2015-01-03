@@ -14,7 +14,7 @@ if __name__ == '__main__':
     try:
         opts, args = getopt.getopt(argv,"hi:o:",["ifile=","ofile="])
     except getopt.GetoptError:
-        print 'test.py -i <inputfile> -o <outputfile>'
+        print 'main.py -i <inputfile> -o <outputfile>'
         sys.exit(2)
 
     for opt, arg in opts:
@@ -49,15 +49,15 @@ if __name__ == '__main__':
             if ext_ref.get_resource()=='ESO':
                 eso_property = ext_ref.get_reference()
                 for single_res in predicate.get_external_references():
-                    if single_res.get_resource()=='FrameNet':
+                    if single_res.get_resource()=='FrameNet' or single_res.get_resource()=='FrameNet-':
                         fn_pred = single_res.get_reference()
                         # Check if the ESO predicate coresponds to this FrameNet predicate
                         pred_res = g1.query('SELECT * WHERE { nwr:' + eso_property + ' nwr:correspondToFrameNetFrame "http://www.newsreader-project.eu/framenet#' + fn_pred + '" }', initNs={ 'owl': OWL_NS, 'nwr': NWR_NS })
                         # Depending on the query results, add "+" or "-"
                         if len(pred_res)>0:
-                            single_res.set_resource(single_res.get_resource() + "+")
+                            single_res.set_resource("FrameNet+")
                         else:
-                            single_res.set_resource(single_res.get_resource() + "-")
+                            single_res.set_resource("FrameNet-")
                                 
                 # When there is an ESO choice, iterate through the roles and identify the right FrameNet meanings there as well
                 for role in predicate.get_roles():
@@ -65,14 +65,14 @@ if __name__ == '__main__':
                         if role_ext_ref.get_resource()=='ESO':
                             eso_property2 = role_ext_ref.get_reference().split("@")
                             for other_res in role.get_external_references():
-                                if other_res.get_resource()=='FrameNet':
+                                if other_res.get_resource()=='FrameNet' or other_res.get_resource()=='FrameNet-':
                                     fn_ref = other_res.get_reference().split("@")
                                     # Check if both the predicate and the role correspond between ESO and FrameNet
                                     role_res = g1.query('SELECT * WHERE { nwr:' + eso_property2[0] + ' nwr:correspondToFrameNetFrame "http://www.newsreader-project.eu/framenet#' + fn_ref[0] + '" . nwr:' + eso_property2[1] + ' nwr:correspondToFrameNetElement "http://www.newsreader-project.eu/framenet#' + fn_ref[1] + '" }', initNs={ 'owl': OWL_NS, 'nwr': NWR_NS })
                                     if len(role_res)>0:
-                                        other_res.set_resource(other_res.get_resource() + "+")
+                                        other_res.set_resource("FrameNet+")
                                     else:
-                                        other_res.set_resource(other_res.get_resource() + "-")
+                                        other_res.set_resource("FrameNet-")
 
     # Dump the resulting NAF to an output file                                        
     my_parser.dump(outputfile)

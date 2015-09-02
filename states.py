@@ -8,8 +8,8 @@ from rdflib.graph import Graph
 import sys
 import os
 
-path='/mnt/scistor0/Cars/Cars-new-out'
-
+#path='/mnt/scistor0/Cars/Cars-new-out'
+path='/Users/filipilievski/Downloads/processed'
 
 # Add the relevant namespaces: OWL and NWR
 OWL_NS = Namespace('http://www.w3.org/2002/07/owl#')
@@ -73,11 +73,13 @@ for root, dirs, files in os.walk(path):
                             pred_res = g1.query('SELECT * WHERE { nwr:' + eso_property + ' nwr:correspondToFrameNetFrame "http://www.newsreader-project.eu/framenet#' + fn_pred + '" }', initNs={ 'owl': OWL_NS, 'nwr': NWR_NS })
                             # Depending on the query results, add "+" or "-"
                             if len(pred_res)>0:
-                                single_res.set_resource(single_res.get_resource() + "+")
                                 predicates_pos_fn+=1
                             else:
-                                single_res.set_resource(single_res.get_resource() + "-")
                                 predicates_neg_fn+=1
+                        elif single_res.get_resource()=='FrameNet+':
+                            predicates_pos_fn+=1
+                        elif single_res.get_resource()=='FrameNet-':
+                            predicates_neg_fn+=1
                 elif ext_ref.get_resource()=='FrameNet':
                     predicates_fn_total+=1
                 elif ext_ref.get_resource()=='VerbNet':
@@ -100,11 +102,13 @@ for root, dirs, files in os.walk(path):
                                 # Check if both the predicate and the role correspond between ESO and FrameNet
                                 role_res = g1.query('SELECT * WHERE { nwr:' + eso_property2[0] + ' nwr:correspondToFrameNetFrame "http://www.newsreader-project.eu/framenet#' + fn_ref[0] + '" . nwr:' + eso_property2[1] + ' nwr:correspondToFrameNetElement "http://www.newsreader-project.eu/framenet#' + fn_ref[1] + '" }', initNs={ 'owl': OWL_NS, 'nwr': NWR_NS })
                                 if len(role_res)>0:
-                                    other_res.set_resource(other_res.get_resource() + "+")
                                     roles_pos_fn+=1
                                 else:
-                                    other_res.set_resource(other_res.get_resource() + "-")
                                     roles_neg_fn+=1
+                            elif other_res.get_resource()=='FrameNet+':
+                                roles_pos_fn+=1
+                            elif other_res.get_resource()=='FrameNet-':
+                                roles_neg_fn+=1
                     elif role_ext_ref.get_resource()=='FrameNet':
                         roles_fn_total+=1
                     elif role_ext_ref.get_resource()=='VerbNet':

@@ -22,7 +22,7 @@ This module can be used for two purposes: analysis of SRL data and for postproce
 In order to run the module:
 
 1. clone the repository from guthub: https://github.com/newsreader/vua-srl-postprocess. 
-2. In states.py, modify the path variable to point to the root location of the files. (I can also make this a command line argument, if you prefer)
+2. In states.py, modify the path variable to point to the root location of the files.
 3. Execute:
 
 python states.py

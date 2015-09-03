@@ -1,1 +1,1 @@
-/Users/filipilievski/Downloads/processed/.DS_Store
+/Users/filipilievski/Downloads/wikinews_v3_out/.DS_Store

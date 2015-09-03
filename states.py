@@ -9,7 +9,7 @@ import sys
 import os
 
 #path='/mnt/scistor0/Cars/Cars-new-out'
-path='/Users/filipilievski/Downloads/processed'
+path='/Users/filipilievski/Downloads/wikinews_v3_out'
 
 # Add the relevant namespaces: OWL and NWR
 OWL_NS = Namespace('http://www.w3.org/2002/07/owl#')
@@ -21,6 +21,7 @@ namespace_manager.bind('nwr', NWR_NS)
 # predicate counters
 predicates_total = 0
 predicates_eso = 0
+predicates_eso_total = 0
 predicates_pos_fn = 0
 predicates_neg_fn = 0
 predicates_fn_total = 0
@@ -31,6 +32,7 @@ predicates_pb_total = 0
 # role counters
 roles_total = 0
 roles_eso = 0
+roles_eso_total = 0
 roles_pos_fn = 0
 roles_neg_fn = 0
 roles_fn_total = 0
@@ -62,9 +64,14 @@ for root, dirs, files in os.walk(path):
         for predicate in my_parser.get_predicates():
             pred_id = predicate.get_id()
             predicates_total+=1
+            eso_found=False
             for ext_ref in predicate.get_external_references():
                 if ext_ref.get_resource()=='ESO':
-                    predicates_eso+=1
+                    predicates_eso_total+=1
+                    if eso_found is False:
+                        predicates_eso+=1
+                        eso_found=True
+                    """
                     eso_property = ext_ref.get_reference()
                     for single_res in predicate.get_external_references():
                         if single_res.get_resource()=='FrameNet':
@@ -76,11 +83,9 @@ for root, dirs, files in os.walk(path):
                                 predicates_pos_fn+=1
                             else:
                                 predicates_neg_fn+=1
-                        elif single_res.get_resource()=='FrameNet+':
-                            predicates_pos_fn+=1
-                        elif single_res.get_resource()=='FrameNet-':
-                            predicates_neg_fn+=1
-                elif ext_ref.get_resource()=='FrameNet':
+
+                    """
+                elif ext_ref.get_resource()=='FrameNet' or ext_ref.get_resource()=='FrameNet-' or ext_ref.get_resource()=='FrameNet+':
                     predicates_fn_total+=1
                 elif ext_ref.get_resource()=='VerbNet':
                     predicates_vn_total+=1
@@ -90,11 +95,16 @@ for root, dirs, files in os.walk(path):
                     predicates_pb_total+=1
                     
                 # When there is an ESO choice, iterate through the roles and identify the right FrameNet meanings there as well
+            eso_found=False
             for role in predicate.get_roles():
                 roles_total+=1
                 for role_ext_ref in role.get_external_references():
                     if role_ext_ref.get_resource()=='ESO':
-                        roles_eso+=1
+                        roles_eso_total+=1
+                        if eso_found is False:
+                            roles_eso+=1
+                            eso_found=True
+                        """
                         eso_property2 = role_ext_ref.get_reference().split("@")
                         for other_res in role.get_external_references():
                             if other_res.get_resource()=='FrameNet':
@@ -109,7 +119,8 @@ for root, dirs, files in os.walk(path):
                                 roles_pos_fn+=1
                             elif other_res.get_resource()=='FrameNet-':
                                 roles_neg_fn+=1
-                    elif role_ext_ref.get_resource()=='FrameNet':
+                        """
+                    elif role_ext_ref.get_resource()=='FrameNet' or role_ext_ref.get_resource()=='FrameNet+' or role_ext_ref.get_resource()=='FrameNet-':
                         roles_fn_total+=1
                     elif role_ext_ref.get_resource()=='VerbNet':
                         roles_vn_total+=1
@@ -122,12 +133,11 @@ for root, dirs, files in os.walk(path):
 print "##### Predicates #####"
 
 print "Total predicates: " + str(predicates_total)
-print "Predicates with ESO: " + str(predicates_eso)
-print "Percentage of ESO predicates: " + str(predicates_eso*100.0/predicates_total) + "%"
-print "Positive FrameNet cases: " + str(predicates_pos_fn)
-print "Negative FrameNet cases:" + str(predicates_neg_fn)
-print "Unjudged FrameNet cases: " + str(predicates_fn_total-predicates_pos_fn-predicates_neg_fn)
-
+print "Predicates with at least one ESO: " + str(predicates_eso) + ". Percentage predicates with at least one ESO: " + str(predicates_eso*100.0/predicates_total) + "%"
+#print "Positive FrameNet cases: " + str(predicates_pos_fn)
+#print "Negative FrameNet cases:" + str(predicates_neg_fn)
+#print "Unjudged FrameNet cases: " + str(predicates_fn_total-predicates_pos_fn-predicates_neg_fn)
+print "Total ESO predicates: " + str(predicates_eso_total) + ". ESO predicates per mention: " + str(predicates_eso_total*1.0/predicates_total)
 print "Total FrameNet predicates: " + str(predicates_fn_total) + ". FN predicates per mention: " + str(predicates_fn_total*1.0/predicates_total)
 print "Total VerbNet predicates: " + str(predicates_vn_total) + ". VN predicates per mention: " + str(predicates_vn_total*1.0/predicates_total)
 print "Total WordNet predicates: " + str(predicates_wn_total) + ". WN predicates per mention: " + str(predicates_wn_total*1.0/predicates_total)
@@ -136,12 +146,11 @@ print "Total PropBank predicates: " + str(predicates_pb_total) + ". PB predicate
 print "##### Roles #####"
 
 print "Total roles: " + str(roles_total)
-print "Roles with ESO: " + str(roles_eso)
-print "Percentage of ESO roles: " + str(roles_eso*100.0/roles_total) + "%"
-print "Positive FrameNet cases: " + str(roles_pos_fn)
-print "Negative FrameNet cases:" + str(roles_neg_fn)
-print "Unjudged FrameNet cases: " + str(roles_fn_total-roles_pos_fn-roles_neg_fn)
-
+print "Roles with at least one ESO: " + str(roles_eso) + ". Percentage roles with at least one ESO: " + str(roles_eso*100.0/roles_total) + "%"
+#print "Positive FrameNet cases: " + str(roles_pos_fn)
+#print "Negative FrameNet cases:" + str(roles_neg_fn)
+#print "Unjudged FrameNet cases: " + str(roles_fn_total-roles_pos_fn-roles_neg_fn)
+print "Total ESO roles: " + str(roles_eso_total) + ". ESO roles per mention: " + str(roles_eso_total*1.0/roles_total)
 print "Total FrameNet roles: " + str(roles_fn_total) + ". FN roles per mention: " + str(roles_fn_total*1.0/roles_total)
 print "Total VerbNet roles: " + str(roles_vn_total) + ". VN roles per mention: " + str(roles_vn_total*1.0/roles_total)
 print "Total WordNet roles: " + str(roles_wn_total) + ". WN roles per mention: " + str(roles_wn_total*1.0/roles_total)

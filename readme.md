@@ -46,7 +46,7 @@ Contact
 -------
 * Filip Ilievski
 * VU University Amsterdam
-* [f.ilievski@student.vu.nl](f.ilievski@student.vu.nl)
+* [f.ilievski@student.vu.nl](f.ilievski@vu.nl)
 
 
 License
